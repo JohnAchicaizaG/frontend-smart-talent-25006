@@ -1,40 +1,58 @@
-import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 import { Task } from '../interfaces/task.interface';
 
 @Injectable({ providedIn: 'root' })
 export class TaskService {
-  private tasks: Task[] = [
-    { id: 1, title: 'Aprender Angular', completed: false },
-    { id: 2, title: 'Configurar NgRx con Signals', completed: true },
-    { id: 3, title: 'Implementar modo oscuro', completed: false }
-  ];
+  private http = inject(HttpClient);
+  private apiUrl = `${environment.apiUrl}/tasks`;
+
 
   getAllTasks(): Observable<Task[]> {
-    return of(this.tasks); // ✅ Retorna tareas simuladas
+    return this.http.get<Task[]>(this.apiUrl).pipe(
+      map(tasks => tasks.map(task => ({
+        ...task,
+        completed: task.isCompleted
+      })))
+    );
   }
+
 
   getTaskById(taskId: number): Observable<Task> {
-    const task = this.tasks.find(t => t.id === taskId);
-    return of(task!); // ✅ Simulación de obtener una tarea específica
+    return this.http.get<Task>(`${this.apiUrl}/${taskId}`).pipe(
+      map(task => ({
+        ...task,
+        completed: task.isCompleted
+      }))
+    );
   }
+
 
   createTask(task: Partial<Task>): Observable<Task> {
-    const newTask: Task = { id: Date.now(), title: task.title || 'Nueva tarea', completed: false };
-    this.tasks.push(newTask);
-    return of(newTask);
+    const mappedTask = { ...task, isCompleted: task.isCompleted };
+    return this.http.post<Task>(this.apiUrl, mappedTask).pipe(
+      map(task => ({
+        ...task,
+        completed: task.isCompleted
+      }))
+    );
   }
 
+
   updateTask(task: Task): Observable<Task> {
-    const index = this.tasks.findIndex(t => t.id === task.id);
-    if (index !== -1) {
-      this.tasks[index] = { ...task };
-    }
-    return of(task);
+    const mappedTask = { ...task, isCompleted: task.isCompleted };
+    return this.http.put<Task>(`${this.apiUrl}/${task.id}`, mappedTask).pipe(
+      map(task => ({
+        ...task,
+        completed: task.isCompleted
+      }))
+    );
   }
 
   deleteTask(taskId: number): Observable<void> {
-    this.tasks = this.tasks.filter(t => t.id !== taskId);
-    return of(undefined);
+    return this.http.delete<void>(`${this.apiUrl}/${taskId}`);
   }
 }

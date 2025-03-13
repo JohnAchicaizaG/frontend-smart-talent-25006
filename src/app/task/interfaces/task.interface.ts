@@ -2,5 +2,6 @@ export interface Task {
   id: number;
   title: string;
   description?: string;
-  completed: boolean;
+  isCompleted: boolean;
+  createdAt?: string;
 }

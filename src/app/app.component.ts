@@ -1,10 +1,11 @@
 import { Component, effect, OnInit, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
 import { TasksComponent } from './task/tasks.component';
+import { FooterComponent } from "./task/components/footer/footer.component";
+import { NavbarComponent } from "./task/components/navbar/navbar.component";
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, TasksComponent],
+  imports: [TasksComponent, FooterComponent, NavbarComponent],
   standalone: true,
   templateUrl: './app.component.html',
 })

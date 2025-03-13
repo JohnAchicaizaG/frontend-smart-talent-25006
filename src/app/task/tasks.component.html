@@ -1,62 +1,78 @@
-<div class="min-h-screen py-4 md:py-8 px-4 md:px-12 bg-gray-100 transition duration-300 ease-in-out">
+<div class="min-h-[80vh] py-4 md:py-8 px-4 md:px-12 bg-gray-100 transition duration-300 ease-in-out">
+  <!-- Contenido Main -->
+  <main class="grid grid-cols-1 lg:grid-cols-2 gap-6 pb-22 mt-8">
 
-  <!-- Navbar -->
-  <nav class="bg-gray-700 shadow-lg px-6 py-4 rounded-lg flex items-center justify-between">
-    <div class="text-xl font-bold text-gray-200">LogoApp</div>
-    <h1 class="text-2xl font-semibold text-gray-200">Gestor de Tareas</h1>
-  </nav>
-
-  <!-- Main Content -->
-  <main class="grid grid-cols-1 lg:grid-cols-2 gap-6 pb-24 mt-8">
-
-    <!-- New Task Form -->
+    <!-- Formulario de nueva tarea -->
     <section class="bg-gray-200 shadow-xl rounded-2xl p-8 text-gray-800">
-      <h2 class="text-xl font-semibold mb-4">Crear Nueva Tarea</h2>
-      <form (submit)="addNewTask(taskInput.value); taskInput.value=''; $event.preventDefault();">
-        <input #taskInput type="text" placeholder="Título" aria-label="Título de la tarea"
-          class="w-full p-3 border border-gray-400 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-gray-500 bg-gray-50 text-gray-900" />
+      <h2 class="text-xl font-semibold mb-4">
+        {{ isEditing ? 'Editar Tarea' : 'Crear Nueva Tarea' }}
+      </h2>
 
-        <button type="submit"
-          class="w-full bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md">
-          Agregar Tarea
+      <form [formGroup]="taskForm" (ngSubmit)="addOrUpdateTask()">
+        <input type="text" formControlName="title" placeholder="Título" aria-label="Título de la tarea"
+          class="w-full p-3 border border-gray-400 rounded-lg mb-2 focus:outline-none focus:ring-2 focus:ring-gray-500 bg-gray-50 text-gray-900 " />
+        <div *ngIf="taskForm.get('title')?.invalid && taskForm.get('title')?.touched" class="text-red-500 text-sm mb-2">
+          * El título es obligatorio (mínimo 3 caracteres).
+        </div>
+
+        <textarea formControlName="description" placeholder="Descripción" aria-label="Descripción de la tarea"
+          class="w-full p-3 border border-gray-400 rounded-lg mb-2 focus:outline-none focus:ring-2 focus:ring-gray-500 bg-gray-50 text-gray-900"
+          rows="5"></textarea>
+        <div *ngIf="taskForm.get('description')?.invalid && taskForm.get('description')?.touched"
+          class="text-red-500 text-sm">
+          * La descripción no puede superar los 255 caracteres.
+        </div>
+
+        <button type="submit" [disabled]="taskForm.invalid"
+          class="w-full cursor-pointer py-2 px-4 rounded-lg shadow-md text-white font-semibold
+                 {{ isEditing ? 'bg-blue-600 hover:bg-blue-700 ' : 'bg-gray-600 hover:bg-gray-700' }} disabled:opacity-50 disabled:cursor-not-allowed">
+          {{ isEditing ? 'Guardar Cambios' : 'Agregar Tarea' }}
+        </button>
+
+        <button *ngIf="isEditing" type="button" (click)="resetForm()"
+          class="w-full mt-2 py-2 px-4 rounded-lg shadow-md bg-red-500 hover:bg-red-600 text-white font-semibold cursor-pointer">
+          Cancelar Edición
         </button>
       </form>
     </section>
 
-    <!-- Tasks List Section -->
+    <!-- Lista de seleccion de tareas (Filtro) -->
     <section class="bg-gray-200 shadow-lg rounded-2xl p-6">
       <h2 class="text-xl font-semibold text-gray-800 mb-4">Mis Tareas</h2>
 
-      <!-- Filters -->
+      <!-- Filtros -->
       <div class="mb-4 flex flex-wrap gap-2">
-        <button (click)="selectFilter('all')" class="px-4 py-1 bg-blue-600 text-white rounded-full">
+        <button (click)="selectFilter('all')"
+          class="px-4 py-1 bg-blue-600 hover:bg-blue-700  text-white rounded-full cursor-pointer">
           Todas
         </button>
-        <button (click)="selectFilter('completed')" class="px-4 py-1 bg-green-600 text-white rounded-full">
+        <button (click)="selectFilter('completed')"
+          class="px-4 py-1 bg-green-600 hover:bg-green-700 text-white rounded-full cursor-pointer">
           Completadas
         </button>
-        <button (click)="selectFilter('pending')" class="px-4 py-1 bg-amber-500 text-white rounded-full">
+        <button (click)="selectFilter('pending')"
+          class="px-4 py-1 bg-amber-500 hover:bg-amber-600 text-white rounded-full cursor-pointer">
           Pendientes
         </button>
       </div>
 
-      <!-- Task List -->
+      <!-- Lista de Tareas -->
       <ul class="space-y-4 overflow-auto max-h-[60vh] pr-2">
         <li *ngFor="let task of filteredTasks(); trackBy: trackById"
-            class="flex items-center justify-between bg-gray-50 border border-gray-300 rounded-lg p-4 shadow-md hover:shadow-xl transition duration-200 ease-in-out">
+          class="flex items-center justify-between bg-gray-50 border border-gray-300 rounded-lg p-4 shadow-md hover:shadow-xl transition duration-200 ease-in-out">
 
           <div class="flex items-center">
-            <input type="checkbox" [checked]="task.completed"
-              (change)="toggleTaskCompletion(task)"
+            <input type="checkbox" [checked]="task.isCompleted" (change)="toggleTaskCompletion(task)"
               class="h-5 w-5 text-green-600 rounded">
 
             <div class="ml-4">
               <h3 class="text-lg font-semibold text-gray-800">{{ task.title }}</h3>
+              <p class="text-gray-600">{{ task.description }}</p>
             </div>
           </div>
 
           <div class="flex space-x-4">
-            <button class="text-gray-700 hover:text-gray-900" (click)="toggleTaskCompletion(task)">
+            <button class="text-yellow-600 hover:text-yellow-800" (click)="editTask(task)">
               <span class="material-icons-outlined">edit</span>
             </button>
             <button class="text-red-600 hover:text-red-800" (click)="removeTask(task.id)">
@@ -69,10 +85,4 @@
 
     </section>
   </main>
-
-  <!-- Footer -->
-  <footer class="fixed bottom-0 left-0 w-full bg-gray-700 text-gray-100 py-3 text-center shadow-lg">
-    © 2025 Gestor de Tareas. Todos los derechos reservados.
-  </footer>
-
 </div>

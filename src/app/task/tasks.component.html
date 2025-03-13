@@ -1,0 +1,78 @@
+<div class="min-h-screen py-4 md:py-8 px-4 md:px-12 bg-gray-100 transition duration-300 ease-in-out">
+
+  <!-- Navbar -->
+  <nav class="bg-gray-700 shadow-lg px-6 py-4 rounded-lg flex items-center justify-between">
+    <div class="text-xl font-bold text-gray-200">LogoApp</div>
+    <h1 class="text-2xl font-semibold text-gray-200">Gestor de Tareas</h1>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="grid grid-cols-1 lg:grid-cols-2 gap-6 pb-24 mt-8">
+
+    <!-- New Task Form -->
+    <section class="bg-gray-200 shadow-xl rounded-2xl p-8 text-gray-800">
+      <h2 class="text-xl font-semibold mb-4">Crear Nueva Tarea</h2>
+      <form (submit)="addNewTask(taskInput.value); taskInput.value=''; $event.preventDefault();">
+        <input #taskInput type="text" placeholder="Título" aria-label="Título de la tarea"
+          class="w-full p-3 border border-gray-400 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-gray-500 bg-gray-50 text-gray-900" />
+
+        <button type="submit"
+          class="w-full bg-gray-600 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md">
+          Agregar Tarea
+        </button>
+      </form>
+    </section>
+
+    <!-- Tasks List Section -->
+    <section class="bg-gray-200 shadow-lg rounded-2xl p-6">
+      <h2 class="text-xl font-semibold text-gray-800 mb-4">Mis Tareas</h2>
+
+      <!-- Filters -->
+      <div class="mb-4 flex flex-wrap gap-2">
+        <button (click)="selectFilter('all')" class="px-4 py-1 bg-blue-600 text-white rounded-full">
+          Todas
+        </button>
+        <button (click)="selectFilter('completed')" class="px-4 py-1 bg-green-600 text-white rounded-full">
+          Completadas
+        </button>
+        <button (click)="selectFilter('pending')" class="px-4 py-1 bg-amber-500 text-white rounded-full">
+          Pendientes
+        </button>
+      </div>
+
+      <!-- Task List -->
+      <ul class="space-y-4 overflow-auto max-h-[60vh] pr-2">
+        <li *ngFor="let task of filteredTasks(); trackBy: trackById"
+            class="flex items-center justify-between bg-gray-50 border border-gray-300 rounded-lg p-4 shadow-md hover:shadow-xl transition duration-200 ease-in-out">
+
+          <div class="flex items-center">
+            <input type="checkbox" [checked]="task.completed"
+              (change)="toggleTaskCompletion(task)"
+              class="h-5 w-5 text-green-600 rounded">
+
+            <div class="ml-4">
+              <h3 class="text-lg font-semibold text-gray-800">{{ task.title }}</h3>
+            </div>
+          </div>
+
+          <div class="flex space-x-4">
+            <button class="text-gray-700 hover:text-gray-900" (click)="toggleTaskCompletion(task)">
+              <span class="material-icons-outlined">edit</span>
+            </button>
+            <button class="text-red-600 hover:text-red-800" (click)="removeTask(task.id)">
+              <span class="material-icons-outlined">delete</span>
+            </button>
+          </div>
+
+        </li>
+      </ul>
+
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="fixed bottom-0 left-0 w-full bg-gray-700 text-gray-100 py-3 text-center shadow-lg">
+    © 2025 Gestor de Tareas. Todos los derechos reservados.
+  </footer>
+
+</div>

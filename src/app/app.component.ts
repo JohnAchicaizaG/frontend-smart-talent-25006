@@ -1,12 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, effect, OnInit, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { TasksComponent } from './task/tasks.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, TasksComponent],
+  standalone: true,
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
 })
-export class AppComponent {
-  title = 'task-manager-angular-smart-talent';
+export class AppComponent  {
+
 }

@@ -1,59 +1,70 @@
-# TaskManagerAngularSmartTalent
+# Task Manager Angular 🚀
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.2.
+¡Bienvenido a **Task Manager Angular**! 🎯 Una aplicación de gestión de tareas desarrollada en **Angular 19** con un enfoque modular, escalable y con alto rendimiento. La app ya está en **producción** y puedes probarla aquí:
 
-## Development server
+🔗 [Task Manager Angular - Producción](https://frontend-prueba-tecnica-smart-talent.netlify.app/)
 
-To start a local development server, run:
+## ✨ Tecnologías utilizadas
 
-```bash
+✅ **Angular 19** (Standalone Components)  
+✅ **NgRx Signals** (Gestión de estado reactiva)  
+✅ **Tailwind CSS** (Estilos rápidos y modernos)  
+✅ **Pruebas unitarias con Karma & Jasmine** (Alta cobertura de código)  
+✅ **Accesibilidad y buenas prácticas SEO**  
+✅ **Despliegue en Netlify**
+
+---
+
+## 🚀 Instalación y ejecución local
+
+Para correr esta aplicación en tu entorno local, sigue estos pasos:
+
+### 1️⃣ Clona el repositorio
+```sh
+git clone https://github.com/tu-usuario/task-manager-angular.git
+cd task-manager-angular
+```
+
+### 2️⃣ Instala las dependencias
+```sh
+npm install
+```
+
+### 3️⃣ Levanta el servidor local
+```sh
 ng serve
 ```
+🔹 La aplicación estará disponible en: `http://localhost:4200/`
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
+### 4️⃣ Ejecuta las pruebas unitarias (opcional, pero recomendado 💡) url 
+```sh
 ng test
 ```
+🔹 La tests estarán disponible en: `http://localhost:9877/ `
 
-## Running end-to-end tests
 
-For end-to-end (e2e) testing, run:
+## 📌 Funcionalidades principales
+✅ **CRUD de Tareas** (Crear, Leer, Actualizar y Eliminar)  
+✅ **Marcar tareas como completadas**  
+✅ **Filtrado y búsqueda de tareas**  
+✅ **Persistencia de estado con NgRx Signals**  
+✅ **Interfaz responsiva y accesible**  
+✅ **Altos estándares de calidad y pruebas**  
 
-```bash
-ng e2e
+
+## 📌 **Versión de Node Utilizada**
+```sh
+node --version
 ```
+**Versión actual:** `v22.13.1`
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+---
 
-## Additional Resources
+## 🔥 Autor
+👨‍💻 **John Alexander Chicaiza**  
+💼 Desarrollador Fullstack  🚀
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+📧 Contacto: [jachicaizal@outlook.com](mailto:jachicaizal@outlook.com)  
+🌐 Portafolio: [jachicaiza.dev](https://portfolio-john-chicaiza.netlify.app/)  
+
+¡Gracias por visitar este proyecto! ⭐

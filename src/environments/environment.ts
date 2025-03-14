@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://localhost:5068/api'
+  apiUrl: 'http://backend-smart.somee.com/api'
 };

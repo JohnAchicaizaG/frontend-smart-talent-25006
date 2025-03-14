@@ -5,3 +5,10 @@ export interface Task {
   isCompleted: boolean;
   createdAt?: string;
 }
+
+
+export enum TaskFilter {
+  All = 'all',
+  Completed = 'completed',
+  Pending = 'pending'
+}

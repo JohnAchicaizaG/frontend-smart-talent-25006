@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-navbar',
-  standalone: true,
   template: `
   <div class=" py-4 md:py-8 px-4 md:px-12 bg-gray-100 transition duration-300 ease-in-out">
   <nav class="bg-gray-700 shadow-lg px-6 py-4 rounded-lg flex items-center justify-between">

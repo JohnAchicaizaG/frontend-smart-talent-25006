@@ -19,14 +19,14 @@
           class="w-full p-3 border border-gray-400 rounded-lg mb-2 focus:outline-none focus:ring-2 focus:ring-gray-500 bg-gray-50 text-gray-900"
           rows="5"></textarea>
         <div *ngIf="taskForm.get('description')?.invalid && taskForm.get('description')?.touched"
-          class="text-red-500 text-sm">
-          * La descripción no puede superar los 255 caracteres.
+          class="text-red-500 text-sm mb-2">
+          * La descripción no puede superar los 50 caracteres.
         </div>
 
         <button type="submit" [disabled]="taskForm.invalid"
           class="w-full cursor-pointer py-2 px-4 rounded-lg shadow-md text-white font-semibold
-                 {{ isEditing ? 'bg-blue-600 hover:bg-blue-700 ' : 'bg-gray-600 hover:bg-gray-700' }} disabled:opacity-50 disabled:cursor-not-allowed">
-          {{ isEditing ? 'Guardar Cambios' : 'Agregar Tarea' }}
+                  {{ isEditing ? 'bg-blue-600 hover:bg-blue-700 ' : 'bg-gray-600 hover:bg-gray-700' }} disabled:opacity-50 disabled:cursor-not-allowed">
+                  {{ isEditing ? 'Guardar Cambios' : 'Agregar Tarea' }}
         </button>
 
         <button *ngIf="isEditing" type="button" (click)="resetForm()"
@@ -42,19 +42,23 @@
 
       <!-- Filtros -->
       <div class="mb-4 flex flex-wrap gap-2">
-        <button (click)="selectFilter('all')"
-          class="px-4 py-1 bg-blue-600 hover:bg-blue-700  text-white rounded-full cursor-pointer">
+        <button (click)="selectFilter(TaskFilter.All)"
+          [ngClass]="{'bg-blue-600': activeFilter === TaskFilter.All, 'bg-gray-400': activeFilter !== TaskFilter.All}"
+          class="px-4 py-1 text-white rounded-full cursor-pointer transition-all">
           Todas
         </button>
-        <button (click)="selectFilter('completed')"
-          class="px-4 py-1 bg-green-600 hover:bg-green-700 text-white rounded-full cursor-pointer">
+        <button (click)="selectFilter(TaskFilter.Completed)"
+          [ngClass]="{'bg-green-600': activeFilter === TaskFilter.Completed, 'bg-gray-400': activeFilter !== TaskFilter.Completed}"
+          class="px-4 py-1 text-white rounded-full cursor-pointer transition-all">
           Completadas
         </button>
-        <button (click)="selectFilter('pending')"
-          class="px-4 py-1 bg-amber-500 hover:bg-amber-600 text-white rounded-full cursor-pointer">
+        <button (click)="selectFilter(TaskFilter.Pending)"
+          [ngClass]="{'bg-amber-600': activeFilter === TaskFilter.Pending, 'bg-gray-400': activeFilter !== TaskFilter.Pending}"
+          class="px-4 py-1 text-white rounded-full cursor-pointer transition-all">
           Pendientes
         </button>
       </div>
+
 
       <!-- Lista de Tareas -->
       <ul class="space-y-4 overflow-auto max-h-[60vh] pr-2">
@@ -63,7 +67,7 @@
 
           <div class="flex items-center">
             <input type="checkbox" [checked]="task.isCompleted" (change)="toggleTaskCompletion(task)"
-              class="h-5 w-5 text-green-600 rounded">
+              class="h-5 w-5 accent-green-600 ">
 
             <div class="ml-4">
               <h3 class="text-lg font-semibold text-gray-800">{{ task.title }}</h3>

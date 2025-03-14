@@ -6,7 +6,6 @@ import { NavbarComponent } from "./task/components/navbar/navbar.component";
 @Component({
   selector: 'app-root',
   imports: [TasksComponent, FooterComponent, NavbarComponent],
-  standalone: true,
   templateUrl: './app.component.html',
 })
 export class AppComponent  {

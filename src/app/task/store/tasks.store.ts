@@ -94,7 +94,10 @@ export const TaskStore = signalStore(
       async deleteTask(taskId: number) {
         try {
           await firstValueFrom(taskService.deleteTask(taskId));
+
           patchState(store, removeEntity(taskId));
+          patchState(store, setAllEntities([...store.entities()]));
+
         } catch (error) {
           console.error('Error eliminando tarea:', error);
         }

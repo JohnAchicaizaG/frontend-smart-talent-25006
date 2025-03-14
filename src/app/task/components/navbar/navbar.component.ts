@@ -8,7 +8,7 @@ import { Component } from '@angular/core';
       <div class="flex items-center space-x-3">
         <img src="assets/smart_talent.png" alt="Logo" class="h-10 w-auto" />
       </div>
-      <h1 class="text-2xl font-semibold text-gray-200">Gestor de Tareas</h1>
+      <h1 class="text-xl font-semibold text-gray-200">Gestor de Tareas</h1>
     </nav>
   </div>
 

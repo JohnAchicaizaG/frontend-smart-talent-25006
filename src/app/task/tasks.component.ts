@@ -128,10 +128,10 @@ export class TasksComponent implements OnInit {
   async removeTask(taskId: number): Promise<void> {
     if (await confirmAction('¿Estás seguro?', 'Esta acción no se puede deshacer', 'warning', 'Sí, eliminar', '#b91c1c')) {
       await this.taskStore.deleteTask(taskId);
-      showNotification('🗑️ Tarea Eliminada', 'La tarea ha sido eliminada con éxito.', 'success', '#fecaca', '#7f1d1d');
+      this.taskStore.loadTasks();
+      showNotification('Tarea Eliminada', 'La tarea ha sido eliminada con éxito.', 'success', '#fecaca', '#7f1d1d');
     }
   }
-
   /**
    * Alterna el estado de completado de una tarea
    * @param {Task} task - Tarea a actualizar
@@ -149,4 +149,41 @@ export class TasksComponent implements OnInit {
   trackById(index: number, task: Task): number {
     return task.id;
   }
+
+
+  /**
+ * Devuelve un mensaje personalizado según el filtro seleccionado cuando no hay tareas.
+ */
+  getEmptyMessage(): string {
+    switch (this.activeFilter) {
+      case TaskFilter.Completed:
+        return "No hay tareas completadas.";
+      case TaskFilter.Pending:
+        return "No hay tareas pendientes.";
+      default:
+        return "No hay tareas registradas.";
+    }
+  }
+
+  /**
+   * Devuelve una descripción amigable cuando no hay tareas en el filtro actual.
+   */
+  getEmptyDescription(): string {
+    switch (this.activeFilter) {
+      case TaskFilter.Completed:
+        return "Marca las tareas como completadas para que aparezcan aquí.";
+      case TaskFilter.Pending:
+        return "¡Disfruta tu tiempo libre! 😎";
+      default:
+        return "Crea una nueva tarea para comenzar a organizarte.";
+    }
+  }
+
+  /**
+   * Reinicia el filtro para mostrar todas las tareas.
+   */
+  resetFilter(): void {
+    this.selectFilter(TaskFilter.All);
+  }
+
 }

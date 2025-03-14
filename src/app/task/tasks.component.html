@@ -26,7 +26,7 @@
         <button type="submit" [disabled]="taskForm.invalid"
           class="w-full cursor-pointer py-2 px-4 rounded-lg shadow-md text-white font-semibold
                   {{ isEditing ? 'bg-blue-600 hover:bg-blue-700 ' : 'bg-gray-600 hover:bg-gray-700' }} disabled:opacity-50 disabled:cursor-not-allowed">
-                  {{ isEditing ? 'Guardar Cambios' : 'Agregar Tarea' }}
+          {{ isEditing ? 'Guardar Cambios' : 'Agregar Tarea' }}
         </button>
 
         <button *ngIf="isEditing" type="button" (click)="resetForm()"
@@ -61,7 +61,8 @@
 
 
       <!-- Lista de Tareas -->
-      <ul class="space-y-4 overflow-auto max-h-[60vh] pr-2">
+      <!-- Lista de Tareas -->
+      <ul *ngIf="filteredTasks().length > 0" class="space-y-4 overflow-auto max-h-[60vh] pr-2">
         <li *ngFor="let task of filteredTasks(); trackBy: trackById"
           class="flex items-center justify-between bg-gray-50 border border-gray-300 rounded-lg p-4 shadow-md hover:shadow-xl transition duration-200 ease-in-out">
 
@@ -83,9 +84,28 @@
               <span class="material-icons-outlined">delete</span>
             </button>
           </div>
-
         </li>
       </ul>
+
+      <!-- Mensaje cuando no hay tareas disponibles -->
+      <div *ngIf="filteredTasks().length === 0" class="flex flex-col items-center justify-center py-10">
+        <div class="animate-bounce mb-4">
+          <span class="material-icons-outlined text-gray-400 text-9xl">pending_actions</span>
+        </div>
+
+        <p class="text-xl font-semibold text-gray-700">
+          {{ getEmptyMessage() }}
+        </p>
+        <p class="text-gray-500 mt-2 text-sm">
+          {{ getEmptyDescription() }}
+        </p>
+
+        <!-- Botón para resetear el filtro (NO aparece si ya estamos en "Todas") -->
+        <button *ngIf="activeFilter !== TaskFilter.All" (click)="resetFilter()"
+          class="mt-4 px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-md transition-all">
+          Ver todas las tareas
+        </button>
+      </div>
 
     </section>
   </main>

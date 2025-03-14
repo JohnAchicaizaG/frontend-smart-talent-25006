@@ -1,9 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
-import { Task } from '../interfaces/task.interface';
+import { Task, ApiResponse } from '../interfaces/task.interface';
 
 /**
  * Servicio para manejar las operaciones CRUD de las tareas.
@@ -21,42 +21,52 @@ export class TaskService {
    * @returns {Observable<Task[]>} - Lista de tareas en un Observable.
    */
   getAllTasks(): Observable<Task[]> {
-    return this.http.get<Task[]>(this.apiUrl);
+    return this.http.get<ApiResponse<Task[]>>(this.apiUrl).pipe(
+      map(response => response.data ?? []) // Devuelve un array vacío si data es null
+    );
   }
 
   /**
    * Obtiene una tarea específica por su ID.
    * @param {number} taskId - ID de la tarea a obtener.
-   * @returns {Observable<Task>} - La tarea encontrada en un Observable.
+   * @returns {Observable<Task | null>} - La tarea encontrada o null.
    */
-  getTaskById(taskId: number): Observable<Task> {
-    return this.http.get<Task>(`${this.apiUrl}/${taskId}`);
+  getTaskById(taskId: number): Observable<Task | null> {
+    return this.http.get<ApiResponse<Task>>(`${this.apiUrl}/${taskId}`).pipe(
+      map(response => response.data ?? null) // Devuelve null si data es undefined o null
+    );
   }
 
   /**
    * Crea una nueva tarea en la API.
    * @param {Partial<Task>} task - Datos de la nueva tarea.
-   * @returns {Observable<Task>} - La tarea creada en un Observable.
+   * @returns {Observable<Task | null>} - La tarea creada o null si hay un error.
    */
-  createTask(task: Partial<Task>): Observable<Task> {
-    return this.http.post<Task>(this.apiUrl, task);
+  createTask(task: Partial<Task>): Observable<Task | null> {
+    return this.http.post<ApiResponse<Task>>(this.apiUrl, task).pipe(
+      map(response => response.data ?? null)
+    );
   }
 
   /**
    * Actualiza una tarea existente en la API.
    * @param {Task} task - Datos actualizados de la tarea.
-   * @returns {Observable<Task>} - La tarea actualizada en un Observable.
+   * @returns {Observable<Task | null>} - La tarea actualizada o null si falla.
    */
-  updateTask(task: Task): Observable<Task> {
-    return this.http.put<Task>(`${this.apiUrl}/${task.id}`, task);
+  updateTask(task: Task): Observable<Task | null> {
+    return this.http.put<ApiResponse<Task>>(`${this.apiUrl}/${task.id}`, task).pipe(
+      map(response => response.data ?? null)
+    );
   }
 
   /**
    * Elimina una tarea de la API.
    * @param {number} taskId - ID de la tarea a eliminar.
-   * @returns {Observable<void>} - Observable que indica la finalización de la operación.
+   * @returns {Observable<string>} - Mensaje de confirmación.
    */
-  deleteTask(taskId: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${taskId}`);
+  deleteTask(taskId: number): Observable<string> {
+    return this.http.delete<ApiResponse<string>>(`${this.apiUrl}/${taskId}`).pipe(
+      map(response => response.message)
+    );
   }
 }
